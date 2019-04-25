@@ -1,0 +1,136 @@
+#define sensor1 A3
+#define sensor2 A4
+#define sensor3 A5
+
+#define andar1 A0
+#define andar2 A1
+#define andar3 A2
+
+#define inicializacao 4
+#define subir 8
+#define descer 6
+
+#define andar1Led 13
+#define andar2Led 12
+#define andar3Led 11
+
+int andarAtual = 0;
+int andarChamado = 0;
+
+void setLed (int ledNumber)
+{
+  switch (ledNumber)
+  {
+    case 1:
+      digitalWrite (andar1Led, HIGH);
+      digitalWrite (andar2Led, LOW);
+      digitalWrite (andar3Led, LOW);
+      break;
+    case 2:
+      digitalWrite (andar1Led, LOW);
+      digitalWrite (andar2Led, HIGH);
+      digitalWrite (andar3Led, LOW);
+      break;
+    case 3:
+      digitalWrite (andar1Led, LOW);
+      digitalWrite (andar2Led, LOW);
+      digitalWrite (andar3Led, HIGH);
+      break;
+    default:
+      digitalWrite (andar1Led, HIGH);
+      digitalWrite (andar2Led, HIGH);
+      digitalWrite (andar3Led, HIGH);
+      break;
+  }
+}
+
+void setup () {
+  Serial.begin(9600);
+
+  pinMode(inicializacao, OUTPUT);
+  pinMode(subir, OUTPUT);
+  pinMode(descer, OUTPUT);
+  pinMode(andar1Led, OUTPUT);
+  pinMode(andar2Led, OUTPUT);
+  pinMode(andar3Led, OUTPUT);
+
+}
+
+void loop()
+{
+  //Teste de entradas - sensores e botoes
+  Serial.print("Sensores: ");
+  Serial.print(digitalRead(sensor1)); Serial.print(" | ");
+  Serial.print(digitalRead(sensor2)); Serial.print(" | ");
+  Serial.print(digitalRead(sensor3)); Serial.println(" ");
+
+  Serial.print("Botoes: ");
+  Serial.print(digitalRead(andar1)); Serial.print(" | ");
+  Serial.print(digitalRead(andar2)); Serial.print(" | ");
+  Serial.print(digitalRead(andar3)); Serial.println(" ");
+
+  //Lê o estado dos botões
+  if (digitalRead(andar1) == HIGH)
+  {
+    andarChamado = 1;
+    Serial.println("Chamado: 1");
+  }
+
+  if (digitalRead(andar2) == HIGH)
+  {
+    andarChamado = 2;
+    Serial.println("Chamado: 2");
+  }
+
+  if (digitalRead(andar3) == HIGH)
+  {
+    andarChamado = 3;
+    Serial.println("Chamado: 3");
+  }
+
+  //Lê o estado dos sensores
+  if (digitalRead(sensor1) == HIGH)
+  {
+    andarAtual = 1;
+    setLed(1);
+    Serial.println("Atual: 1");
+  }
+
+  if (digitalRead(sensor2) == HIGH)
+  {
+    andarAtual = 2;
+    setLed(2);
+    Serial.println("Atual: 2");
+  }
+
+  if (digitalRead(sensor3) == HIGH)
+  {
+    andarAtual = 3;
+    setLed(3);
+    Serial.println("Atual: 3");
+  }
+
+  //Atua motor
+  if (andarChamado > andarAtual)
+  {
+    //subir
+    Serial.println("MOTOR:::::::::::::::Subindo");
+    digitalWrite(subir, HIGH);
+    digitalWrite(descer, LOW);
+    digitalWrite(inicializacao, HIGH);
+  } else if (andarChamado < andarAtual)
+  {
+    //descer
+    Serial.println("MOTOR:::::::::::::::Descendo");
+    digitalWrite(subir, LOW);
+    digitalWrite(descer, HIGH);
+    digitalWrite(inicializacao, HIGH);
+  } else
+  {
+    //parar
+    Serial.println("MOTOR:::::::::::::::Parando");
+    digitalWrite(inicializacao, LOW);
+    digitalWrite(subir, LOW);
+    digitalWrite(descer, LOW);
+  }
+}

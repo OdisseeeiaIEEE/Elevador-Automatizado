@@ -89,21 +89,21 @@ void loop()
   }
 
   //Lê o estado dos sensores
-  if (digitalRead(sensor1) == HIGH)
+  if (digitalRead(sensor1) == LOW)
   {
     andarAtual = 1;
     setLed(1);
     Serial.println("Atual: 1");
   }
 
-  if (digitalRead(sensor2) == HIGH)
+  if (digitalRead(sensor2) == LOW)
   {
     andarAtual = 2;
     setLed(2);
     Serial.println("Atual: 2");
   }
 
-  if (digitalRead(sensor3) == HIGH)
+  if (digitalRead(sensor3) == LOW)
   {
     andarAtual = 3;
     setLed(3);
@@ -133,4 +133,6 @@ void loop()
     digitalWrite(subir, LOW);
     digitalWrite(descer, LOW);
   }
+
+  delay(800);
 }

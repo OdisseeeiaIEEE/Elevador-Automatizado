@@ -1,14 +1,14 @@
-#define sensor1 A3
-#define sensor2 A4
-#define sensor3 A5
+#define sensor1 A0
+#define sensor2 A1
+#define sensor3 A2
 
-#define andar1 A0
-#define andar2 A1
-#define andar3 A2
+#define andar1 A3
+#define andar2 A4
+#define andar3 A5
 
 #define inicializacao 4
-#define subir 8
-#define descer 6
+#define subir 3
+#define descer 2
 
 #define andar1Led 13
 #define andar2Led 12
@@ -44,16 +44,18 @@ void setLed (int ledNumber)
   }
 }
 
-void setup () {
-  Serial.begin(9600);
+void setup ()
+{
+  Serial.begin(115200);
 
   pinMode(inicializacao, OUTPUT);
+
   pinMode(subir, OUTPUT);
   pinMode(descer, OUTPUT);
+
   pinMode(andar1Led, OUTPUT);
   pinMode(andar2Led, OUTPUT);
   pinMode(andar3Led, OUTPUT);
-
 }
 
 void loop()
@@ -93,22 +95,26 @@ void loop()
   {
     andarAtual = 1;
     setLed(1);
-    Serial.println("Atual: 1");
   }
 
   if (digitalRead(sensor2) == LOW)
   {
     andarAtual = 2;
     setLed(2);
-    Serial.println("Atual: 2");
   }
 
   if (digitalRead(sensor3) == LOW)
   {
     andarAtual = 3;
     setLed(3);
-    Serial.println("Atual: 3");
   }
+
+  if(andarAtual == 1)
+    Serial.println("Atual: 1");
+  else if(andarAtual == 2)
+    Serial.println("Atual: 2");
+  else
+    Serial.println("Atual: 3");
 
   //Atua motor
   if (andarChamado > andarAtual)
@@ -134,5 +140,9 @@ void loop()
     digitalWrite(descer, LOW);
   }
 
-  delay(800);
+  Serial.println("------------------");
+  Serial.println("");
+  Serial.println("");
+  Serial.println("");
+  //delay(100);
 }
